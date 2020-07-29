@@ -1,4 +1,8 @@
 /** @file */
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,6 +52,37 @@ int pobierz_dane(int argc, char** argv, int* liczba_zespolow, char** nazwa_zespo
 	return 1;
 }
 
+int czytaj_nazwy(FILE** p_wejscie, int liczba_zespolow, char** imiona, char** nazwiska, char*** p_zespoly, char* nazwa, int liczba_nazw)
+{
 
 
+
+	return 1;
+}
+
+int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, char** nazwiska, char*** p_zespoly)
+{
+	if (!(*p_wejscie))
+	{
+		printf("\nPodano nieprawidlowa sciezke do pliku wejsciowego\n");
+		return 0;
+	}
+
+	int poprawnosc = czytaj_nazwy(p_wejscie, liczba_zespolow, imiona, nazwiska, p_zespoly, "Imiona:", 22);
+
+	if (poprawnosc == 0)
+		return 0;
+	
+	poprawnosc = czytaj_nazwy(p_wejscie, liczba_zespolow, imiona, nazwiska, p_zespoly, "Nazwiska:", 22);
+
+	if (poprawnosc == 0)
+		return 0;
+
+	poprawnosc = czytaj_nazwy(p_wejscie, liczba_zespolow, imiona, nazwiska, p_zespoly, "Zespoly", liczba_zespolow);
+
+	if (poprawnosc == 0)
+		return 0;
+
+	return 1;
+}
 
