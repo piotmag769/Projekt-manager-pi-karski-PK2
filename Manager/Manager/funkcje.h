@@ -8,7 +8,7 @@
 
 #include "struktury.h"
 
-
+int pobierz_dane(int argc, char** argv, int* liczba_zespolow, char** nazwa_zespolu, char** wejsciowy, char** wyjsciowy);
 
 
 
