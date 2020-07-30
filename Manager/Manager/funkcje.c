@@ -54,7 +54,28 @@ int pobierz_dane(int argc, char** argv, int* liczba_zespolow, char** nazwa_zespo
 
 int czytaj_nazwy(FILE** p_wejscie, int liczba_zespolow, char** imiona, char** nazwiska, char*** p_zespoly, char* nazwa, int liczba_nazw)
 {
+	fseek(*p_wejscie, 0, SEEK_SET);
+	int i = 0;
+	char* fraza[10];
+	for (i; i < 10; i++)
+		fraza[i] = NULL;
 
+	int k = fscanf(*p_wejscie, "%s", &fraza);
+	while (strcmp(nazwa, fraza) != 0 && k != EOF)
+		k = fscanf(*p_wejscie, "%s", &fraza);
+
+	if (k == EOF)
+	{
+		printf("\nBrak frazy kluczowej \"%s\" w pliku wejsciowym\n", nazwa);
+		return 0;
+	}
+	
+
+	
+	for (i = 0; i < liczba_nazw; i++)
+	{
+
+	}
 
 
 	return 1;
@@ -78,7 +99,7 @@ int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, ch
 	if (poprawnosc == 0)
 		return 0;
 
-	poprawnosc = czytaj_nazwy(p_wejscie, liczba_zespolow, imiona, nazwiska, p_zespoly, "Zespoly", liczba_zespolow);
+	poprawnosc = czytaj_nazwy(p_wejscie, liczba_zespolow, imiona, nazwiska, p_zespoly, "Zespoly:", liczba_zespolow);
 
 	if (poprawnosc == 0)
 		return 0;

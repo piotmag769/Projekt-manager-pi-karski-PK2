@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 	srand(time(NULL));
 	int liczba_zespolow = 12; //0
 	char* nazwa_zespolu = "Atomowki"; //NULL
-	char* wejsciowy = "Wyjsciowy.txt"; //NULL
+	char* wejsciowy = "Wejsciowy.txt"; //NULL
 	char* wyjsciowy = "Wyjsciowy.txt"; //NULL
 	int poprawnosc = pobierz_dane(argc, argv, &liczba_zespolow, &nazwa_zespolu, &wejsciowy, &wyjsciowy);
 	if (poprawnosc == 0)
