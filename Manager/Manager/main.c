@@ -20,13 +20,21 @@ int main(int argc, char** argv)
 	int poprawnosc = pobierz_dane(argc, argv, &liczba_zespolow, &nazwa_zespolu, &wejsciowy, &wyjsciowy);
 	if (poprawnosc == 0)
 		return 0;
-	char* imiona[22];
-	char* nazwiska[22];
-	char** zespoly;
+	char* imiona[22] = { NULL };
+	char* nazwiska[22] = { NULL };
+	char** zespoly = NULL;
 	FILE* wejscie = fopen(wejsciowy, "r");
 	poprawnosc = czytaj_dane_z_pliku(&wejscie, liczba_zespolow, imiona, nazwiska, &zespoly);
 	if (poprawnosc == 0)
 		return 0;
+	int i = 0;
+	for (i; i < 22; i++)
+	{
+		puts(imiona[i]);
+		puts(nazwiska[i]);
+	}
+	for (i=0; i < liczba_zespolow; i++)
+		puts(zespoly[i]);
 
 	return 0;
 }
