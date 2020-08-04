@@ -118,7 +118,7 @@ int czytaj_nazwy(FILE** p_wejscie, char** p_nazwy, char* fraza, int liczba_nazw)
 	return 1;
 }
 
-int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, char** nazwiska, char*** p_zespoly)
+int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, char** nazwiska, char*** p_zespoly, char* nazwa_zespolu)
 {
 	if (!(*p_wejscie))
 	{
@@ -153,7 +153,7 @@ int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, ch
 
 	*p_zespoly = calloc(liczba_zespolow, sizeof(char*));
 
-	poprawnosc = czytaj_nazwy(p_wejscie, *p_zespoly, "Zespoly:", liczba_zespolow);
+	poprawnosc = czytaj_nazwy(p_wejscie, *p_zespoly, "Zespoly:", liczba_zespolow - 1);
 
 	if (poprawnosc == 0)
 	{
@@ -164,7 +164,7 @@ int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, ch
 			free(nazwiska[i]);
 		}
 
-		for (i = 0; i < liczba_zespolow; i++)
+		for (i = 0; i < liczba_zespolow - 1; i++)
 			free((*p_zespoly)[i]);
 
 		free(*p_zespoly);
@@ -172,6 +172,88 @@ int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, ch
 		return 0;
 	}
 
+	(*p_zespoly)[liczba_zespolow - 1] = nazwa_zespolu;
+
 	return 1;
 }
 
+void generuj_zespoly(struct zespol** ppHead, char** imiona, char** nazwiska, char** zespoly, int liczba_zespolow, char* nazwa_zespolu)
+{
+	int i = 0;
+	struct zespol* pTemp = NULL;
+	for (i; i < liczba_zespolow; i++)
+	{
+		if (i == 0)
+		{
+			*ppHead = malloc(sizeof(struct zespol));
+			pTemp = *ppHead;
+		}
+		else
+		{
+			pTemp->pNext = malloc(sizeof(struct zespol));
+			pTemp = pTemp->pNext;
+		}
+
+		pTemp->wages = 100000;
+		pTemp->budget = 10000000;
+		pTemp->nr_id = i + 1;
+		pTemp->points = 0;
+		pTemp->nazwa_druzyny = zespoly[i];
+		pTemp->liczba_juniorow = 0;
+
+		int j = 0;
+		for (j; j < 11; j++)
+		{
+			pTemp->squad[j].imie = imiona[rand() % 22];
+			pTemp->squad[j].nazwisko = nazwiska[rand() % 22];
+			pTemp->squad[j].kontuzja = 0;
+			pTemp->squad[j].klauzula_odstepnego = rand() % 1000000 + 100000;
+			pTemp->squad[j].tygodniowka = rand() % 100000 + 10000;
+			pTemp->squad[j].umiejetnosci = rand() % 100 + 1;
+		}
+		for (j = 0; j < 5; j++)
+		{
+			pTemp->bench[j].imie = imiona[rand() % 22];
+			pTemp->bench[j].nazwisko = nazwiska[rand() % 22];
+			pTemp->bench[j].kontuzja = 0;
+			pTemp->bench[j].klauzula_odstepnego = rand() % 1000000 + 100000;
+			pTemp->bench[j].tygodniowka = rand() % 100000 + 10000;
+			pTemp->bench[j].umiejetnosci = rand() % 100 + 1;
+		}
+
+		pTemp->trainer.imie = imiona[rand() % 22];
+		pTemp->trainer.nazwisko = nazwiska[rand() % 22];
+		pTemp->trainer.klauzula_odstepnego = rand() % 1000000 + 100000;
+		pTemp->trainer.tygodniowka = rand() % 100000 + 10000;
+		pTemp->trainer.umiejetnosci = rand() % 100 + 1;
+
+		pTemp->pNext = NULL;
+	}
+}
+
+void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp)
+{
+	int i = 0;
+	fprintf(*p_wejscie, "%s\n\nNumer id: %i\n\nPunkty: %i\n\nBudzet: %i\n\nTygodniowki: %i\n\nSklad podstawowy:\n", pTemp->nazwa_druzyny, pTemp->nr_id, pTemp->points, pTemp->budget, pTemp->wages);
+	
+	for (i; i < 11; i++)
+		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->squad[i].imie, pTemp->squad[i].nazwisko, pTemp->squad[i].umiejetnosci, pTemp->squad[i].klauzula_odstepnego, pTemp->squad[i].tygodniowka, pTemp->squad[i].kontuzja);
+	fprintf(*p_wejscie, "\n\nLawka:\n");
+	for (i = 0; i < 5; i++)
+		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->bench[i].imie, pTemp->bench[i].nazwisko, pTemp->bench[i].umiejetnosci, pTemp->bench[i].klauzula_odstepnego, pTemp->bench[i].tygodniowka, pTemp->bench[i].kontuzja);
+	fprintf(*p_wejscie, "\n\nJuniorzy:\n");
+	for (i = 0; i < pTemp->liczba_juniorow; i++)
+		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->juniors[i].imie, pTemp->juniors[i].nazwisko, pTemp->juniors[i].umiejetnosci, pTemp->juniors[i].klauzula_odstepnego, pTemp->juniors[i].tygodniowka, pTemp->juniors[i].kontuzja);
+}
+
+void wypisz_tabele(FILE** p_wejscie, struct zespol* pHead)
+{
+	int i = 1;
+	while (pHead)
+	{
+		fprintf(*p_wejscie, "\n%i. ", i);
+		wypisz_zespol(p_wejscie, pHead);
+		pHead = pHead->pNext;
+		i++;
+	}
+}

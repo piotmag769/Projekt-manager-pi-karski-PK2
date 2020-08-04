@@ -24,17 +24,13 @@ int main(int argc, char** argv)
 	char* nazwiska[22] = { NULL };
 	char** zespoly = NULL;
 	FILE* wejscie = fopen(wejsciowy, "r");
-	poprawnosc = czytaj_dane_z_pliku(&wejscie, liczba_zespolow, imiona, nazwiska, &zespoly);
+	poprawnosc = czytaj_dane_z_pliku(&wejscie, liczba_zespolow, imiona, nazwiska, &zespoly, nazwa_zespolu);
 	if (poprawnosc == 0)
 		return 0;
-	int i = 0;
-	for (i; i < 22; i++)
-	{
-		puts(imiona[i]);
-		puts(nazwiska[i]);
-	}
-	for (i=0; i < liczba_zespolow; i++)
-		puts(zespoly[i]);
-
+	struct zespol* pHead = NULL;
+	generuj_zespoly(&pHead, imiona, nazwiska, zespoly, liczba_zespolow, nazwa_zespolu);
+	FILE* pTemp = stdout;
+	FILE** ppTemp = &pTemp;
+	wypisz_tabele(ppTemp, pHead);
 	return 0;
 }

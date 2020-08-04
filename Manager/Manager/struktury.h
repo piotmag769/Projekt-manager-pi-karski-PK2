@@ -35,18 +35,19 @@ struct trener
 	int tygodniowka;
 };
 
-struct druzyna
+struct zespol
 {
 	char* nazwa_druzyny;
 	int nr_id;
 	int points;
 	int budget;
 	int wages;
+	int liczba_juniorow;
 	struct zawodnik squad[11];
 	struct zawodnik bench[5];
 	struct zawodnik juniors[5];
 	struct trener trainer;
-	struct druzyna* pNext;
+	struct zespol* pNext;
 };
 
 #endif
