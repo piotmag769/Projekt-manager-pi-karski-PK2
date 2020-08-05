@@ -29,8 +29,9 @@ int main(int argc, char** argv)
 		return 0;
 	struct zespol* pHead = NULL;
 	generuj_zespoly(&pHead, imiona, nazwiska, zespoly, liczba_zespolow, nazwa_zespolu);
-	FILE* pTemp = stdout;
-	FILE** ppTemp = &pTemp;
-	wypisz_tabele(ppTemp, pHead);
+	struct lk* kpHead = NULL;
+	generuj_liste_do_kolejek(&kpHead, pHead, liczba_zespolow);
+	przeprowadz_kolejke(pHead, &kpHead, liczba_zespolow, 1);
+	przeprowadz_kolejke(pHead, &kpHead, liczba_zespolow, 2);
 	return 0;
 }

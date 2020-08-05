@@ -56,8 +56,8 @@ int czytaj_nazwy(FILE** p_wejscie, char** p_nazwy, char* fraza, int liczba_nazw)
 {
 	fseek(*p_wejscie, 0, SEEK_SET);
 	int i = 0;
-	char napis[20];
-	for (i = 0; i < 20; i++)
+	char napis[15];
+	for (i = 0; i < 15; i++)
 		napis[i] = NULL;
 
 	int k = fscanf(*p_wejscie, "%s", napis);
@@ -73,7 +73,7 @@ int czytaj_nazwy(FILE** p_wejscie, char** p_nazwy, char* fraza, int liczba_nazw)
 	for (i = 0; i < liczba_nazw; i++)
 	{
 		int j = 0;
-		for (j; j < 20; j++)
+		for (j; j < 15; j++)
 			napis[j] = NULL;
 
 		k = fscanf(*p_wejscie, "%s", napis);
@@ -231,6 +231,154 @@ void generuj_zespoly(struct zespol** ppHead, char** imiona, char** nazwiska, cha
 	}
 }
 
+void generuj_liste_do_kolejek(struct lk** pkpHead, struct zespol* pHead, int liczba_zespolow)
+{
+	*pkpHead = malloc(sizeof(struct lk));
+	(*pkpHead)->nr_id = 1;
+	struct lk* pTemp = *pkpHead;
+	int i = 1;
+	for (i; i < liczba_zespolow - 1; i++)
+	{
+		pTemp->pNext = malloc(sizeof(struct lk));
+		pTemp = pTemp->pNext;
+		pTemp->nr_id = i + 1;
+	}
+	pTemp->pNext = *pkpHead;
+}
+
+void sortuj_tabele(struct zespol* pHead, int liczba_zespolow)
+{
+	struct zespol* pTemp;
+	int k = 0;
+	for (k; k < liczba_zespolow-1; k++)
+	{
+		pTemp = pHead;
+		int j = 0;
+		for (j; j < liczba_zespolow - 1 - k; j++)
+		{
+			if (pTemp->points < pTemp->pNext->points)
+			{
+				struct zespol T = *pTemp;
+				struct zespol* T1 = pTemp->pNext;
+				T.pNext = pTemp->pNext->pNext;
+				*pTemp = *(pTemp->pNext);
+				pTemp->pNext = T1;
+				*T1 = T;
+			}
+			if (pTemp->points == pTemp->pNext->points)
+			{
+				int a1 = 0;
+				int a2 = 0;
+				int i = 0;
+				for (i; i < 11; i++)
+				{
+					a1 += 3 * pTemp->squad[i].umiejetnosci;
+					a2 += 3 * pTemp->pNext->squad[i].umiejetnosci;
+				}
+				for (i = 0; i < 5; i++)
+				{
+					a1 += pTemp->bench[i].umiejetnosci;
+					a2 += pTemp->pNext->bench[i].umiejetnosci;
+				}
+
+				a1 += 15 * pTemp->trainer.umiejetnosci;
+				a2 += 15 * pTemp->pNext->trainer.umiejetnosci;
+
+				if (a1 < a2)
+				{
+					struct zespol T = *pTemp;
+					struct zespol* T1 = pTemp->pNext;
+					T.pNext = pTemp->pNext->pNext;
+					*pTemp = *(pTemp->pNext);
+					pTemp->pNext = T1;
+					*T1 = T;
+				}
+			}
+			pTemp = pTemp->pNext;
+		}
+	}
+}
+
+void symuluj_mecz(struct zespol* pT1, struct zespol* pT2)
+{
+	int a1 = 0;
+	int a2 = 0;
+	int i = 0;
+	for (i; i < 11; i++)
+	{
+		a1 += 3*pT1->squad[i].umiejetnosci;
+		a2 += 3*pT2->squad[i].umiejetnosci;
+	}
+	for (i = 0; i < 5; i++)
+	{
+		a1 += pT1->bench[i].umiejetnosci;
+		a2 += pT2->bench[i].umiejetnosci;
+	}
+
+	a1 += 15*pT1->trainer.umiejetnosci;
+	a2 += 15*pT2->trainer.umiejetnosci;
+
+	if (a1 > a2)
+	{
+		a2 = rand() % 3;
+		a1 = a2 + 1 + rand() % 3;
+		pT1->points += 3;
+	}
+	else if (a1 < a2)
+	{
+		a1 = rand() % 3;
+		a2 = a1 + 1 + rand() % 3;
+		pT2->points += 3;
+	}
+	else
+	{
+		a1 = rand() % 4;
+		a2 = a1;
+		pT1->points += 1;
+		pT2->points += 1;
+	}
+	printf("\n%-15s %-1i - %1i %15s\n", pT1->nazwa_druzyny, a1, a2, pT2->nazwa_druzyny);
+}
+
+void przeprowadz_kolejke(struct zespol* pHead, struct lk** pkpHead, int liczba_zespolow, int nr_kolejki)
+{
+	int a1 = (*pkpHead)->nr_id;
+	int a2 = liczba_zespolow;
+	struct zespol* T1 = pHead;
+	struct zespol* T2 = pHead;
+	while (T1->nr_id != a1)
+		T1 = T1->pNext;
+	while (T2->nr_id != a2)
+		T2 = T2->pNext;
+	symuluj_mecz(T1, T2);
+	struct lk* L1;
+	struct lk* L2;
+	int i = 1;
+	for (i; i < liczba_zespolow / 2; i++)
+	{
+		L1 = *pkpHead;
+		L2 = *pkpHead;
+		T1 = pHead;
+		T2 = pHead;
+		int j = 0;
+		for (j; j < i; j++)
+			L1 = L1->pNext;
+		for (j = 0; j < liczba_zespolow - 1 - i; j++)
+			L2 = L2->pNext;
+		while (T1->nr_id != L1->nr_id)
+			T1 = T1->pNext;
+		while (T2->nr_id != L2->nr_id)
+			T2 = T2->pNext;
+		symuluj_mecz(T1, T2);
+	}
+	(*pkpHead) = (*pkpHead)->pNext;
+}
+
+void przeprowadz_lige()
+{
+
+}
+
 void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp)
 {
 	int i = 0;
@@ -246,13 +394,15 @@ void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp)
 		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->juniors[i].imie, pTemp->juniors[i].nazwisko, pTemp->juniors[i].umiejetnosci, pTemp->juniors[i].klauzula_odstepnego, pTemp->juniors[i].tygodniowka, pTemp->juniors[i].kontuzja);
 }
 
-void wypisz_tabele(FILE** p_wejscie, struct zespol* pHead)
+void wypisz_tabele(struct zespol* pHead)
 {
 	int i = 1;
 	while (pHead)
 	{
-		fprintf(*p_wejscie, "\n%i. ", i);
-		wypisz_zespol(p_wejscie, pHead);
+		FILE* pTemp = stdout;
+		FILE** ppTemp = &pTemp;
+		printf("\n%i. ", i);
+		wypisz_zespol(ppTemp, pHead);
 		pHead = pHead->pNext;
 		i++;
 	}

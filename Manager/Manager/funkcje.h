@@ -19,8 +19,16 @@ int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, ch
 
 void generuj_zespoly(struct zespol** ppHead, char** imiona, char** nazwiska, char** zespoly, int liczba_zespolow, char* nazwa_zespolu);
 
+void generuj_liste_do_kolejek(struct lk** pkpHead, struct zespol* pHead, int liczba_zespolow);
+
+void sortuj_tabele(struct zespol* pHead, int liczba_zespolow);
+
+void symuluj_mecz(struct zespol* pT1, struct zespol* pT2);
+
+void przeprowadz_kolejke(struct zespol* pHead, struct lk** pkpHead, int liczba_zespolow, int nr_kolejki);
+
 void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp);
 
-void wypisz_tabele(FILE** p_wejscie, struct zespol* pHead);
+void wypisz_tabele(struct zespol* pHead);
 
 #endif
