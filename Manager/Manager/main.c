@@ -28,10 +28,9 @@ int main(int argc, char** argv)
 	if (poprawnosc == 0)
 		return 0;
 	struct zespol* pHead = NULL;
-	generuj_zespoly(&pHead, imiona, nazwiska, zespoly, liczba_zespolow, nazwa_zespolu);
+	generuj_zespoly(&pHead, imiona, nazwiska, zespoly, liczba_zespolow);
 	struct lk* kpHead = NULL;
 	generuj_liste_do_kolejek(&kpHead, pHead, liczba_zespolow);
-	przeprowadz_kolejke(pHead, &kpHead, liczba_zespolow, 1);
-	przeprowadz_kolejke(pHead, &kpHead, liczba_zespolow, 2);
+	przeprowadz_lige(pHead, &kpHead, liczba_zespolow, nazwa_zespolu, imiona, nazwiska);
 	return 0;
 }
