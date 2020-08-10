@@ -415,126 +415,85 @@ void umozliw_transfer(struct zespol* pHead, struct zespol* pMy, int liczba_zespo
 		int i = 1;
 		for (i; i < a; i++)
 			pTemp = pTemp->pNext;
+		if (pTemp == pMy)
+			printf("\nNie mozesz kupic zawodnika ze swojej druzyny");
+		else
+		{
 
-		printf("\nWybierz, czy chcesz kupic zawodnika:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-trenera - wybierz 4\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
-		k = scanf("%i", &a);
-		while (a<0 || a>3 || k == 0)
-		{
-			printf("\nWpisales nieprawidlowy numer. Wybierz, czy chcesz kupic zawodnika:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-trenera - wybierz 4\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
-			if (k == 0)
-				getchar();
+			printf("\nWybierz, czy chcesz kupic zawodnika:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-trenera - wybierz 4\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
 			k = scanf("%i", &a);
-		}
-		struct zawodnik* pT1 = NULL;
-		if (a == 0)
-			break;
-		if (a == 4)
-		{
-			int b = pMy->budget + pMy->trainer.klauzula_odstepnego - pTemp->trainer.klauzula_odstepnego;
-			int w = pMy->wages + pMy->trainer.tygodniowka - pTemp->trainer.tygodniowka;
-			int c = pTemp->budget + pTemp->trainer.klauzula_odstepnego - pMy->trainer.klauzula_odstepnego;
-			int y = pTemp->wages + pTemp->trainer.tygodniowka - pMy->trainer.tygodniowka;
-			if (b < 0 || w < 0 || c < 0 || y < 0)
-				printf("\nJednej z druzyn nie stac na dokonanie tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nMozesz nadal dokonac innego transferu\n", b, w, c, y);
-			else
+			while (a < 0 || a>4 || k == 0)
 			{
-				printf("\nMozesz dokonac tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nWybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ", b, w, c, y);
-				k = scanf("%i", &a);
-				while (a < 0 || a > 1 || k == 0)
-				{
-					printf("\nPodano nieprawidlowy numer. Wybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ");
-					if (k == 0)
-						getchar();
-					k = scanf("%i", &a);
-				}
-				if (a == 0)
-					printf("\nWybrano brak realizacji transferu. Mozesz nadal dokonac innego transferu\n");
-				if (a == 1)
-				{
-					printf("\nZrealizowano transfer. Nowy wyglad tabeli:\n");
-					struct trener T;
-					T = pTemp->trainer;
-					pTemp->trainer = pMy->trainer;
-					pMy->trainer = T;
-					pMy->budget = b;
-					pTemp->budget = c;
-					pMy->wages = w;
-					pTemp->wages = y;
-					wypisz_tabele(pHead);
-					break;
-				}
-			}
-		}
-		else 
-		{
-			int j = 0;
-			if (a == 1)
-			{
-				pT1 = pTemp->squad;
-				j = 11;
-			}
-			if (a == 2)
-			{
-				pT1 = pTemp->bench;
-				j = 5;
-			}
-			if (a == 3)
-			{
-				pT1 = pTemp->juniors;
-				j = pTemp->liczba_juniorow;
-			}
-
-			printf("\nWybierz numer zawodnika, ktorego chcesz kupic (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
-			k = scanf("%i", &a);
-			while (a < 0 || a > j || k == 0)
-			{
-				printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika, ktorego chcesz kupic (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
+				printf("\nWpisales nieprawidlowy numer. Wybierz, czy chcesz kupic zawodnika:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-trenera - wybierz 4\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
 				if (k == 0)
 					getchar();
 				k = scanf("%i", &a);
 			}
+
 			if (a == 0)
 				break;
-			
-			pT1 += a - 1;
-
-			if (pT1->kontuzja == 1)
-				printf("\nNie mozesz kupic kontuzjowanego zawodnika. Mozesz nadal dokonac innego transferu\n");
-			else 
+			if (a == 4)
 			{
-				printf("\nWybierz zawodnika, ktorego chcesz sprzedac:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
-				k = scanf("%i", &a);
-				while (a < 0 || a > 4 || k == 0)
+				int b = pMy->budget + pMy->trainer.klauzula_odstepnego - pTemp->trainer.klauzula_odstepnego;
+				int w = pMy->wages + pMy->trainer.tygodniowka - pTemp->trainer.tygodniowka;
+				int c = pTemp->budget + pTemp->trainer.klauzula_odstepnego - pMy->trainer.klauzula_odstepnego;
+				int y = pTemp->wages + pTemp->trainer.tygodniowka - pMy->trainer.tygodniowka;
+				if (b < 0 || w < 0 || c < 0 || y < 0)
+					printf("\nJednej z druzyn nie stac na dokonanie tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nMozesz nadal dokonac innego transferu\n", b, w, c, y);
+				else
 				{
-					printf("\nPodano nieprawidlowy numer. Wybierz zawodnika, ktorego chcesz sprzedac:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
-					if (k == 0)
-						getchar();
+					printf("\nMozesz dokonac tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nWybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ", b, w, c, y);
 					k = scanf("%i", &a);
+					while (a < 0 || a > 1 || k == 0)
+					{
+						printf("\nPodano nieprawidlowy numer. Wybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ");
+						if (k == 0)
+							getchar();
+						k = scanf("%i", &a);
+					}
+					if (a == 0)
+						printf("\nWybrano brak realizacji transferu. Mozesz nadal dokonac innego transferu\n");
+					if (a == 1)
+					{
+						printf("\nZrealizowano transfer. Nowy wyglad tabeli:\n");
+						struct trener T;
+						T = pTemp->trainer;
+						pTemp->trainer = pMy->trainer;
+						pMy->trainer = T;
+						pMy->budget = b;
+						pTemp->budget = c;
+						pMy->wages = w;
+						pTemp->wages = y;
+						wypisz_tabele(pHead);
+						break;
+					}
 				}
-				if (a == 0)
-					break;
-				struct zawodnik* pT2 = NULL;
+			}
+			else
+			{
+				struct zawodnik* pT1 = NULL;
+				int j = 0;
 				if (a == 1)
 				{
-					pT2 = pMy->squad;
+					pT1 = pTemp->squad;
 					j = 11;
 				}
 				if (a == 2)
 				{
-					pT2 = pMy->bench;
+					pT1 = pTemp->bench;
 					j = 5;
 				}
 				if (a == 3)
 				{
-					pT2 = pMy->juniors;
-					j = pMy->liczba_juniorow;
+					pT1 = pTemp->juniors;
+					j = pTemp->liczba_juniorow;
 				}
 
-				printf("\nWybierz numer zawodnika, ktorego chcesz sprzedac (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
+				printf("\nWybierz numer zawodnika, ktorego chcesz kupic (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
 				k = scanf("%i", &a);
 				while (a < 0 || a > j || k == 0)
 				{
-					printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika, ktorego chcesz sprzedac (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
+					printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika, ktorego chcesz kupic (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
 					if (k == 0)
 						getchar();
 					k = scanf("%i", &a);
@@ -542,44 +501,91 @@ void umozliw_transfer(struct zespol* pHead, struct zespol* pMy, int liczba_zespo
 				if (a == 0)
 					break;
 
-				pT2 += a - 1;
+				pT1 += a - 1;
 
-				if (pT2->kontuzja == 1)
-					printf("\nNie mozesz sprzedac kontuzjowanego zawodnika. Mozesz nadal dokonac innego transferu\n");
+				if (pT1->kontuzja == 1)
+					printf("\nNie mozesz kupic kontuzjowanego zawodnika. Mozesz nadal dokonac innego transferu\n");
 				else
 				{
-					int b = pMy->budget + pT2->klauzula_odstepnego - pT1->klauzula_odstepnego;
-					int w = pMy->wages + pT2->tygodniowka - pT1->tygodniowka;
-					int c = pTemp->budget + pT1->klauzula_odstepnego - pT2->klauzula_odstepnego;
-					int y = pTemp->wages + pT1->tygodniowka - pT2->tygodniowka;
-					if (b < 0 || w < 0 || c < 0 || y < 0)
-						printf("\nJednej z druzyn nie stac na dokonanie tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nMozesz nadal dokonac innego transferu\n", b, w, c, y);
+					printf("\nWybierz zawodnika, ktorego chcesz sprzedac:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
+					k = scanf("%i", &a);
+					while (a < 0 || a > 3 || k == 0)
+					{
+						printf("\nPodano nieprawidlowy numer. Wybierz zawodnika, ktorego chcesz sprzedac:\n-ze skladu podstawowego - wybierz 1\n-z rezerwy - wybierz 2\n-z juniorow - wybierz 3\n-jesli nie chcesz wykonac transferow - wybierz 0\n");
+						if (k == 0)
+							getchar();
+						k = scanf("%i", &a);
+					}
+					if (a == 0)
+						break;
+					struct zawodnik* pT2 = NULL;
+					if (a == 1)
+					{
+						pT2 = pMy->squad;
+						j = 11;
+					}
+					if (a == 2)
+					{
+						pT2 = pMy->bench;
+						j = 5;
+					}
+					if (a == 3)
+					{
+						pT2 = pMy->juniors;
+						j = pMy->liczba_juniorow;
+					}
+
+					printf("\nWybierz numer zawodnika, ktorego chcesz sprzedac (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
+					k = scanf("%i", &a);
+					while (a < 0 || a > j || k == 0)
+					{
+						printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika, ktorego chcesz sprzedac (jesli nie chcesz przeprowadzac transferow, wybierz 0): ");
+						if (k == 0)
+							getchar();
+						k = scanf("%i", &a);
+					}
+					if (a == 0)
+						break;
+
+					pT2 += a - 1;
+
+					if (pT2->kontuzja == 1)
+						printf("\nNie mozesz sprzedac kontuzjowanego zawodnika. Mozesz nadal dokonac innego transferu\n");
 					else
 					{
-						printf("\nMozesz dokonac tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nWybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ", b, w, c, y);
-						k = scanf("%i", &a);
-						while (a < 0 || a > 1 || k == 0)
+						int b = pMy->budget + pT2->klauzula_odstepnego - pT1->klauzula_odstepnego;
+						int w = pMy->wages + pT2->tygodniowka - pT1->tygodniowka;
+						int c = pTemp->budget + pT1->klauzula_odstepnego - pT2->klauzula_odstepnego;
+						int y = pTemp->wages + pT1->tygodniowka - pT2->tygodniowka;
+						if (b < 0 || w < 0 || c < 0 || y < 0)
+							printf("\nJednej z druzyn nie stac na dokonanie tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nMozesz nadal dokonac innego transferu\n", b, w, c, y);
+						else
 						{
-							printf("\nPodano nieprawidlowy numer. Wybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ");
-							if (k == 0)
-								getchar();
+							printf("\nMozesz dokonac tego transferu. Nowy bilans wynosilby:\n-dla Twojej druzyny: budzet - %i, tygodniowki - %i\n-dla druzyny przeciwnej: budzet - %i, tygodniowki - %i\nWybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ", b, w, c, y);
 							k = scanf("%i", &a);
-						}
-						if (a == 0)
-							printf("\nWybrano brak realizacji transferu. Mozesz nadal dokonac innego transferu\n");
-						if (a == 1)
-						{
-							printf("\nZrealizowano transfer. Nowy wyglad tabeli:\n");
-							struct zawodnik T;
-							T = *pT2;
-							*pT2 = *pT1;
-							*pT1 = T;
-							pMy->budget = b;
-							pTemp->budget = c;
-							pMy->wages = w;
-							pTemp->wages = y;
-							wypisz_tabele(pHead);
-							break;
+							while (a < 0 || a > 1 || k == 0)
+							{
+								printf("\nPodano nieprawidlowy numer. Wybierz, czy chcesz przeprowadzic ten transfer - tak - 1, nie - 0: ");
+								if (k == 0)
+									getchar();
+								k = scanf("%i", &a);
+							}
+							if (a == 0)
+								printf("\nWybrano brak realizacji transferu. Mozesz nadal dokonac innego transferu\n");
+							if (a == 1)
+							{
+								printf("\nZrealizowano transfer. Nowy wyglad tabeli:\n");
+								struct zawodnik T;
+								T = *pT2;
+								*pT2 = *pT1;
+								*pT1 = T;
+								pMy->budget = b;
+								pTemp->budget = c;
+								pMy->wages = w;
+								pTemp->wages = y;
+								wypisz_tabele(pHead);
+								break;
+							}
 						}
 					}
 				}
@@ -640,7 +646,7 @@ void wybierz_sklad(struct zespol* pMy)
 
 void przeprowadz_kolejke(struct zespol* pHead, struct lk** pkpHead, int liczba_zespolow, int nr_kolejki, char* nazwa_zespolu, char** imiona, char** nazwiska)
 {
-	struct zespol* pMy = pHead; 
+	struct zespol* pMy = pHead;
 	while (strcmp(pMy->nazwa_druzyny, nazwa_zespolu) != 0)
 		pMy = pMy->pNext;
 
@@ -651,7 +657,7 @@ void przeprowadz_kolejke(struct zespol* pHead, struct lk** pkpHead, int liczba_z
 
 	wypisz_tabele(pHead);
 
-	umozliw_transfer(pHead, nazwa_zespolu, liczba_zespolow);
+	umozliw_transfer(pHead, pMy , liczba_zespolow);
 
 	wybierz_sklad(pMy);
 
@@ -711,7 +717,7 @@ void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp)
 	fprintf(*p_wejscie, "\n\nJuniorzy:\n");
 	for (i = 0; i < pTemp->liczba_juniorow; i++)
 		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->juniors[i].imie, pTemp->juniors[i].nazwisko, pTemp->juniors[i].umiejetnosci, pTemp->juniors[i].klauzula_odstepnego, pTemp->juniors[i].tygodniowka, pTemp->juniors[i].kontuzja);
-	fprintf(*p_wejscie, "\n");
+	fprintf(*p_wejscie, "\n\nTrener:\n\n%-15s %-15s %-3i %-7i %-6i\n", pTemp->trainer.imie, pTemp->trainer.nazwisko, pTemp->trainer.umiejetnosci, pTemp->trainer.klauzula_odstepnego, pTemp->trainer.tygodniowka);
 }
 
 void wypisz_tabele(struct zespol* pHead)
