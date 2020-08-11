@@ -159,6 +159,7 @@ int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, ch
 	for (a; a < liczba_zespolow - 1; a++)
 		if (strcmp(nazwa_zespolu, (*p_zespoly)[a]) == 0)
 		{
+			printf("\nTwoj zespol ma taka sama nazwe jak jeden z innych zespolow. Edytuj plik wejscowy z nazwami lub zmien nazwe zespolu\n");
 			poprawnosc = 0;
 			break;
 		}
