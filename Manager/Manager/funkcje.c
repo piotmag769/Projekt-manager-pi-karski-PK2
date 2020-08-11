@@ -384,12 +384,24 @@ void symuluj_mecz(struct zespol* pT1, struct zespol* pT2)
 		a2 = rand() % 3;
 		a1 = a2 + 1 + rand() % 3;
 		pT1->points += 3;
+		int i = 0;
+		for (i; i < 11; i++)
+			pT1->squad[i].umiejetnosci += 1;
+		for (i = 0; i < 5; i++)
+			pT1->bench[i].umiejetnosci += 1;
+		pT1->trainer.umiejetnosci += 1;
 	}
 	else if (a1 < a2)
 	{
 		a1 = rand() % 3;
 		a2 = a1 + 1 + rand() % 3;
 		pT2->points += 3;
+		int i = 0;
+		for (i; i < 11; i++)
+			pT2->squad[i].umiejetnosci += 1;
+		for (i = 0; i < 5; i++)
+			pT2->bench[i].umiejetnosci += 1;
+		pT2->trainer.umiejetnosci += 1;
 	}
 	printf("\n%-15s %-1i - %1i %15s\n", pT1->nazwa_druzyny, a1, a2, pT2->nazwa_druzyny);
 }
@@ -619,7 +631,7 @@ void wybierz_sklad(struct zespol* pMy)
 	int k = scanf("%i", &a);
 	while (a<1 || a>pMy->liczba_juniorow || k == 0)
 	{
-		printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika z juniorow, ktorym chcesz astapic kontuzjowanego gracza: ");
+		printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika z juniorow, ktorym chcesz zastapic kontuzjowanego gracza: ");
 		if (k == 0)
 			getchar();
 		k = scanf("%i", &a);
@@ -638,9 +650,111 @@ void wybierz_sklad(struct zespol* pMy)
 	FILE** ppTemp = &pTemp;
 	wypisz_zespol(ppTemp, pMy);
 
-	//while (1)
+	while (1)
 	{
-		//niewymuszone zmiany w skladzie
+		printf("\nMozesz dokonac zmian w swoim skladzie. Wybierz zawodnika, ktorego chcesz wymienic z innym (0 - brak zmian, 1 - sklad postawowy, 2 - rezerwa): ");
+		k = scanf("%i", &a);
+		while (a < 0 || a > 2 || k == 0)
+		{
+			printf("\nPodano nieprawidlowy numer. Wybierz zawodnika, ktorego chcesz wymienic z innym (0 - brak zmian, 1 - sklad postawowy, 2 - rezerwa): ");
+			if (k == 0)
+				getchar();
+			k = scanf("%i", &a);
+		}
+
+		if (a == 0)
+			break;
+
+		int j = 0;
+		int y = 0;
+
+		if (a == 1)
+		{
+			pT1 = pMy->squad;
+			j = 11;
+			y = 1;
+		}
+		if (a == 2)
+		{
+			pT1 = pMy->bench;
+			j = 5;
+		}
+		printf("\nWybierz numer zawodnika, ktorego chcesz wymienic z innym (0 - brak zmian): ");
+		k = scanf("%i", &a);
+		while (a<0 || a>j || k == 0)
+		{
+			printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika, ktorego chcesz wymienic z innym (0 - brak zmian): ");
+			if (k == 0)
+				getchar();
+			k = scanf("%i", &a);
+		}
+
+		if (a == 0)
+			break;
+
+		pT1 += a - 1;
+
+		if (y == 1)
+			printf("\nWybierz zawodnika, ktorego chcesz wymienic z wybranym (0 - brak zmian, 1 - rezerwa, 2 - juniorzy): ");
+		else
+			printf("\nWybierz zawodnika, ktorego chcesz wymienic z wybranym (0 - brak zmian, 1 - sklad postawowy, 2 - juniorzy): ");
+		k = scanf("%i", &a);
+		while (a < 0 || a > 2 || k == 0)
+		{
+			if (y == 1)
+				printf("\nPodano nieprawidlowy numer. Wybierz zawodnika, ktorego chcesz wymienic z wybranym (0 - brak zmian, 1 - rezerwa, 2 - juniorzy): ");
+			else
+				printf("\nPodano nieprawidlowy numer. Wybierz zawodnika, ktorego chcesz wymienic z wybranym (0 - brak zmian, 1 - sklad postawowy, 2 - juniorzy): ");
+			if (k == 0)
+				getchar();
+			k = scanf("%i", &a);
+		}
+		if (a == 0)
+			break;
+		if (a == 1)
+		{
+			if (y == 1)
+			{
+				pT2 = pMy->bench;
+				j = 5;
+			}
+			else
+			{
+				pT2 = pMy->squad;
+				j = 11;
+			}
+		}
+		if (a == 2)
+		{
+			pT2 = pMy->juniors;
+			j = pMy->liczba_juniorow;
+		}
+
+		printf("\nWybierz numer zawodnika, ktorego chcesz wymienic z wybranym (0 - brak zmian): ");
+		k = scanf("%i", &a);
+		while (a<0 || a>j || k == 0)
+		{
+			printf("\nPodano nieprawidlowy numer. Wybierz numer zawodnika, ktorego chcesz wymienic z wybranym (0 - brak zmian): ");
+			if (k == 0)
+				getchar();
+			k = scanf("%i", &a);
+		}
+
+		if (a == 0)
+			break;
+
+		pT2 += a - 1;
+
+		if (pT2->kontuzja == 1)
+			printf("\nNie mozesz wymienic kontuzjowanego zawodnika z juniorow z innym");
+		else
+		{
+			T = *pT2;
+			*pT2 = *pT1;
+			*pT1 = T;
+			printf("\nWymiana udala sie. Twoj obecny sklad: ");
+			wypisz_zespol(ppTemp, pMy);
+		}
 	}
 }
 
@@ -694,6 +808,8 @@ void przeprowadz_kolejke(struct zespol* pHead, struct lk** pkpHead, int liczba_z
 	}
 	(*pkpHead) = (*pkpHead)->pNext;
 	sortuj_tabele(pHead, liczba_zespolow);
+	getchar();
+	getchar();
 }
 
 void przeprowadz_lige(struct zespol* pHead, struct lk** pkpHead, int liczba_zespolow, char* nazwa_zespolu, char** imiona, char** nazwiska)
@@ -734,12 +850,47 @@ void wypisz_tabele(struct zespol* pHead)
 	}
 }
 
-void wpisz_wyniki_do_pliku()
+void wpisz_wyniki_do_pliku(FILE** p_wejscie, struct zespol* pHead, char* nazwa_zespolu)
 {
-
+	int i = 1;
+	struct zespol* pMy = pHead;
+	while (strcmp(pMy->nazwa_druzyny, nazwa_zespolu) != 0)
+	{
+		pMy = pMy->pNext;
+		i++;
+	}
+	fprintf(*p_wejscie, "Twoja druzyna zakonczyla sezon na %i miejscu. Gratulacje!\n\nOto koncowy stan Twojej druzyny:\n", i);
+	wypisz_zespol(p_wejscie, pMy);
 }
 
-void zwolnij_wszystko()
+void zwolnij_wszystko(struct zespol** ppHead, struct lk** pkpHead, char** imiona, char** nazwiska, char*** p_zespoly, int liczba_zespolow)
 {
+	struct zespol* pTemp;
+	while (*ppHead)
+	{
+		pTemp = *ppHead;
+		*ppHead = (*ppHead)->pNext;
+		free(pTemp);
+	}
+	*ppHead = NULL;
 
+	struct lk* pT;
+	struct lk* pT1 = *pkpHead;
+	do
+	{
+		pT = *pkpHead;
+		*pkpHead = (*pkpHead)->pNext;
+		free(pT);
+	} while (*pkpHead != pT1);
+	*pkpHead = NULL;
+	
+	int i = 0;
+	for (i; i < 22; i++)
+	{
+		free(imiona[i]);
+		free(nazwiska[i]);
+	}
+	for (i = 0; i < liczba_zespolow - 1; i++)
+		free((*p_zespoly)[i]);
+	free(*p_zespoly);
 }

@@ -32,5 +32,8 @@ int main(int argc, char** argv)
 	struct lk* kpHead = NULL;
 	generuj_liste_do_kolejek(&kpHead, pHead, liczba_zespolow);
 	przeprowadz_lige(pHead, &kpHead, liczba_zespolow, nazwa_zespolu, imiona, nazwiska);
+	FILE* wyjscie = fopen(wyjsciowy, "w");
+	wpisz_wyniki_do_pliku(&wyjscie, pHead, nazwa_zespolu);
+	zwolnij_wszystko(&pHead, &kpHead, imiona, nazwiska, &zespoly, liczba_zespolow);
 	return 0;
 }

@@ -37,4 +37,8 @@ void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp);
 
 void wypisz_tabele(struct zespol* pHead);
 
+void wpisz_wyniki_do_pliku(FILE** p_wejscie, struct zespol* pHead, char* nazwa_zespolu);
+
+void zwolnij_wszystko(struct zespol** ppHead, struct lk** pkpHead, char** imiona, char** nazwiska, char*** p_zespoly, int liczba_zespolow);
+
 #endif
