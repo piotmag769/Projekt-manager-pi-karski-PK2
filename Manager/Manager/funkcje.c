@@ -155,6 +155,14 @@ int czytaj_dane_z_pliku(FILE** p_wejscie, int liczba_zespolow, char** imiona, ch
 
 	poprawnosc = czytaj_nazwy(p_wejscie, *p_zespoly, "Zespoly:", liczba_zespolow - 1);
 
+	int a = 0;
+	for (a; a < liczba_zespolow - 1; a++)
+		if (strcmp(nazwa_zespolu, (*p_zespoly)[a]) == 0)
+		{
+			poprawnosc = 0;
+			break;
+		}
+
 	if (poprawnosc == 0)
 	{
 		int i = 0;
@@ -644,7 +652,7 @@ void wybierz_sklad(struct zespol* pMy)
 	*pT2 = *pT1;
 	*pT1 = T;
 
-	printf("\Obecny sklad Twojej druzyny:\n");
+	printf("\nObecny sklad Twojej druzyny:\n\n");
 
 	FILE* pTemp = stdout;
 	FILE** ppTemp = &pTemp;
@@ -752,7 +760,7 @@ void wybierz_sklad(struct zespol* pMy)
 			T = *pT2;
 			*pT2 = *pT1;
 			*pT1 = T;
-			printf("\nWymiana udala sie. Twoj obecny sklad: ");
+			printf("\nWymiana udala sie. Twoj obecny sklad:\n\n");
 			wypisz_zespol(ppTemp, pMy);
 		}
 	}
@@ -814,6 +822,11 @@ void przeprowadz_kolejke(struct zespol* pHead, struct lk** pkpHead, int liczba_z
 
 void przeprowadz_lige(struct zespol* pHead, struct lk** pkpHead, int liczba_zespolow, char* nazwa_zespolu, char** imiona, char** nazwiska)
 {
+	printf("\nPorada dla gracza - przed kazda kolejka i po ostatniej kolejce wypisywana jest tabela\nDane zawodnikow w zespolach wypisywane sa w kolejnosci: imie, nazwisko, umiejetnosci, klauzula odstepnego, tygodniowka, kontuzja (0 - zawodnik niekontuzjowany, 1 - kontuzjowany)\nTrener tak samo, tylko bez kontuzji\n");
+	printf("Mecze symulowane sa na podstawie umiejetnosci zawodnikow i trenera z wagami:\ntrener - waga 15\nsklad postawowy - waga 3\nlawka rezerwowych - waga 1\nPrzed kazda kolejka mozesz przeprowadzac transfery (oczywiscie nie przekraczajac budzetu) i zamieniac zawodnikow w skladzie (przenosic na lawke itp.), w czym w skladzie podstawowym i na lawce nie moze byc zawodnika kontuzjowanego.\n");
+	printf("Przed kolejkami 1., 5., 9., 13. i 17. generowni sa juniorzy (po jednym do kazdej druzyny). Ponadto przed kazda kolejka (ale tez przed wypisaniem tabeli) generowane sa kontuzje zawodnikow.\n\nPowodzenia!\n\n");
+	printf("*w takich momentach jak ten, nacisnij dowolny klawisz, aby kontynuowac*\n\n");
+	getchar();
 	int i = 0;
 	for (i; i < 2 * liczba_zespolow - 2; i++)
 		przeprowadz_kolejke(pHead, pkpHead, liczba_zespolow, i + 1, nazwa_zespolu, imiona, nazwiska);

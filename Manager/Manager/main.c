@@ -13,10 +13,10 @@
 int main(int argc, char** argv)
 {
 	srand(time(NULL));
-	int liczba_zespolow = 12; //0
-	char* nazwa_zespolu = "Atomowki"; //NULL
-	char* wejsciowy = "Wejsciowy.txt"; //NULL
-	char* wyjsciowy = "Wyjsciowy.txt"; //NULL
+	int liczba_zespolow = 0;
+	char* nazwa_zespolu = NULL;
+	char* wejsciowy = NULL;
+	char* wyjsciowy = NULL;
 	int poprawnosc = pobierz_dane(argc, argv, &liczba_zespolow, &nazwa_zespolu, &wejsciowy, &wyjsciowy);
 	if (poprawnosc == 0)
 		return 0;
@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 	char** zespoly = NULL;
 	FILE* wejscie = fopen(wejsciowy, "r");
 	poprawnosc = czytaj_dane_z_pliku(&wejscie, liczba_zespolow, imiona, nazwiska, &zespoly, nazwa_zespolu);
+	fclose(wejscie);
 	if (poprawnosc == 0)
 		return 0;
 	struct zespol* pHead = NULL;
@@ -34,6 +35,7 @@ int main(int argc, char** argv)
 	przeprowadz_lige(pHead, &kpHead, liczba_zespolow, nazwa_zespolu, imiona, nazwiska);
 	FILE* wyjscie = fopen(wyjsciowy, "w");
 	wpisz_wyniki_do_pliku(&wyjscie, pHead, nazwa_zespolu);
+	fclose(wyjscie);
 	zwolnij_wszystko(&pHead, &kpHead, imiona, nazwiska, &zespoly, liczba_zespolow);
 	return 0;
 }
