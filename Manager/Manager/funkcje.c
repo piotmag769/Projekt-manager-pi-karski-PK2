@@ -832,8 +832,7 @@ void przeprowadz_kolejke(struct zespol* pHead, struct lk** pkpHead, int liczba_z
 	}
 	(*pkpHead) = (*pkpHead)->pNext;
 	sortuj_tabele(pHead, liczba_zespolow);
-	getchar();
-	getchar();
+	system("pause");
 }
 
 void przeprowadz_lige(struct zespol* pHead, struct lk** pkpHead, int liczba_zespolow, char* nazwa_zespolu, char** imiona, char** nazwiska)
@@ -841,8 +840,7 @@ void przeprowadz_lige(struct zespol* pHead, struct lk** pkpHead, int liczba_zesp
 	printf("\nPorada dla gracza - przed kazda kolejka i po ostatniej kolejce wypisywana jest tabela\nDane zawodnikow w zespolach wypisywane sa w kolejnosci: imie, nazwisko, umiejetnosci, klauzula odstepnego, tygodniowka, kontuzja (0 - zawodnik niekontuzjowany, 1 - kontuzjowany)\nTrener tak samo, tylko bez kontuzji\n");
 	printf("Mecze symulowane sa na podstawie umiejetnosci zawodnikow i trenera z wagami:\ntrener - waga 15\nsklad postawowy - waga 3\nlawka rezerwowych - waga 1\nPrzed kazda kolejka mozesz przeprowadzac transfery (oczywiscie nie przekraczajac budzetu) i zamieniac zawodnikow w skladzie (przenosic na lawke itp.), w czym w skladzie podstawowym i na lawce nie moze byc zawodnika kontuzjowanego.\n");
 	printf("Przed kolejkami 1., 5., 9., 13. i 17. generowni sa juniorzy (po jednym do kazdej druzyny). Ponadto przed kazda kolejka (ale tez przed wypisaniem tabeli) generowane sa kontuzje zawodnikow.\n\nPowodzenia!\n\n");
-	printf("*w takich momentach jak ten, nacisnij dowolny klawisz, aby kontynuowac*\n\n");
-	getchar();
+	system("pause");
 	int i = 0;
 	for (i; i < 2 * liczba_zespolow - 2; i++)
 		przeprowadz_kolejke(pHead, pkpHead, liczba_zespolow, i + 1, nazwa_zespolu, imiona, nazwiska);
