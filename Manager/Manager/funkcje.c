@@ -10,55 +10,55 @@
 #include "struktury.h"
 #include "funkcje.h"
 
-int pobierz_dane(int argc, char** argv, int* liczba_zespolow, char** nazwa_zespolu, char** wejsciowy, char** wyjsciowy)
+int pobierz_dane(int argc, char** argv, int* p_liczba_zespolow, char** p_nazwa_zespolu, char** p_wejsciowy, char** p_wyjsciowy)
 {
 	int i = 0;
 	for (i; i < argc; i++)
 	{
 		if (strcmp(argv[i], "-we") == 0)
-			*wejsciowy = argv[i + 1];
+			*p_wejsciowy = argv[i + 1];
 		if (strcmp(argv[i], "-wy") == 0)
-			*wyjsciowy = argv[i + 1];
+			*p_wyjsciowy = argv[i + 1];
 		if (strcmp(argv[i], "-l") == 0)
-			*liczba_zespolow = atoi(argv[i + 1]);
+			*p_liczba_zespolow = atoi(argv[i + 1]);
 		if (strcmp(argv[i], "-z") == 0)
-			*nazwa_zespolu = argv[i + 1];
+			*p_nazwa_zespolu = argv[i + 1];
 	}
 
-	if (*liczba_zespolow < 10 || *liczba_zespolow>20 || (*liczba_zespolow) % 2 != 0)
+	if (*p_liczba_zespolow < 10 || *p_liczba_zespolow>20 || (*p_liczba_zespolow) % 2 != 0)
 	{
 		printf("\nLiczba zespolow musi byc liczba pomiedzy 10 i 20 oraz byc parzysta\n");
 		return 0;
 	}
 
-	if (*nazwa_zespolu == NULL)
+	if (*p_nazwa_zespolu == NULL)
 	{
 		printf("\nNie podano nazwy zespolu\n");
 		return 0;
 	}
 
-	if ((*nazwa_zespolu)[0] < 65 || (*nazwa_zespolu)[0] > 90)
+	if ((*p_nazwa_zespolu)[0] < 65 || (*p_nazwa_zespolu)[0] > 90)
 	{
 		printf("\nPierwsza litera nazwy Twojego zespolu musi byc wielka\n");
 		return 0;
 	}
 
-	for (i = 1; i < strlen(*nazwa_zespolu); i++)
+	for (i = 1; i < strlen(*p_nazwa_zespolu); i++)
 	{
-		if ((*nazwa_zespolu)[i] < 97 || (*nazwa_zespolu)[i] > 122)
+		if ((*p_nazwa_zespolu)[i] < 97 || (*p_nazwa_zespolu)[i] > 122)
 		{
 			printf("\nWszystkie litery nazwy Twojego zespolu poza pierwsza musza byc male\n");
 			return 0;
 		}
 	}
 
-	if (*wejsciowy == NULL)
+	if (*p_wejsciowy == NULL)
 	{
 		printf("\nNie podano nazwy pilku wejsciowego\n");
 		return 0;
 	}
 
-	if (*wyjsciowy == NULL)
+	if (*p_wyjsciowy == NULL)
 	{
 		printf("\nNie podano nazwy pilku wyjsciowego\n");
 		return 0;
@@ -847,20 +847,20 @@ void przeprowadz_lige(struct zespol* pHead, struct lk** pkpHead, int liczba_zesp
 	wypisz_tabele(pHead);
 }
 
-void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp)
+void wypisz_zespol(FILE** p_wyjscie, struct zespol* pTemp)
 {
 	int i = 0;
-	fprintf(*p_wejscie, "%s\n\nPunkty: %i\n\nBudzet: %i\n\nTygodniowki: %i\n\nSklad podstawowy:\n", pTemp->nazwa_druzyny, pTemp->nr_id, pTemp->points, pTemp->budget, pTemp->wages);
+	fprintf(*p_wyjscie, "%s\n\nPunkty: %i\n\nBudzet: %i\n\nTygodniowki: %i\n\nSklad podstawowy:\n", pTemp->nazwa_druzyny, pTemp->nr_id, pTemp->points, pTemp->budget, pTemp->wages);
 	
 	for (i; i < 11; i++)
-		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->squad[i].imie, pTemp->squad[i].nazwisko, pTemp->squad[i].umiejetnosci, pTemp->squad[i].klauzula_odstepnego, pTemp->squad[i].tygodniowka, pTemp->squad[i].kontuzja);
-	fprintf(*p_wejscie, "\n\nLawka:\n");
+		fprintf(*p_wyjscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->squad[i].imie, pTemp->squad[i].nazwisko, pTemp->squad[i].umiejetnosci, pTemp->squad[i].klauzula_odstepnego, pTemp->squad[i].tygodniowka, pTemp->squad[i].kontuzja);
+	fprintf(*p_wyjscie, "\n\nLawka:\n");
 	for (i = 0; i < 5; i++)
-		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->bench[i].imie, pTemp->bench[i].nazwisko, pTemp->bench[i].umiejetnosci, pTemp->bench[i].klauzula_odstepnego, pTemp->bench[i].tygodniowka, pTemp->bench[i].kontuzja);
-	fprintf(*p_wejscie, "\n\nJuniorzy:\n");
+		fprintf(*p_wyjscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->bench[i].imie, pTemp->bench[i].nazwisko, pTemp->bench[i].umiejetnosci, pTemp->bench[i].klauzula_odstepnego, pTemp->bench[i].tygodniowka, pTemp->bench[i].kontuzja);
+	fprintf(*p_wyjscie, "\n\nJuniorzy:\n");
 	for (i = 0; i < pTemp->liczba_juniorow; i++)
-		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->juniors[i].imie, pTemp->juniors[i].nazwisko, pTemp->juniors[i].umiejetnosci, pTemp->juniors[i].klauzula_odstepnego, pTemp->juniors[i].tygodniowka, pTemp->juniors[i].kontuzja);
-	fprintf(*p_wejscie, "\n\nTrener:\n\n%-15s %-15s %-3i %-7i %-6i\n", pTemp->trainer.imie, pTemp->trainer.nazwisko, pTemp->trainer.umiejetnosci, pTemp->trainer.klauzula_odstepnego, pTemp->trainer.tygodniowka);
+		fprintf(*p_wyjscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->juniors[i].imie, pTemp->juniors[i].nazwisko, pTemp->juniors[i].umiejetnosci, pTemp->juniors[i].klauzula_odstepnego, pTemp->juniors[i].tygodniowka, pTemp->juniors[i].kontuzja);
+	fprintf(*p_wyjscie, "\n\nTrener:\n\n%-15s %-15s %-3i %-7i %-6i\n", pTemp->trainer.imie, pTemp->trainer.nazwisko, pTemp->trainer.umiejetnosci, pTemp->trainer.klauzula_odstepnego, pTemp->trainer.tygodniowka);
 }
 
 void wypisz_tabele(struct zespol* pHead)
@@ -877,7 +877,7 @@ void wypisz_tabele(struct zespol* pHead)
 	}
 }
 
-void wpisz_wyniki_do_pliku(FILE** p_wejscie, struct zespol* pHead, char* nazwa_zespolu)
+void wpisz_wyniki_do_pliku(FILE** p_wyjscie, struct zespol* pHead, char* nazwa_zespolu)
 {
 	int i = 1;
 	struct zespol* pMy = pHead;
@@ -886,8 +886,8 @@ void wpisz_wyniki_do_pliku(FILE** p_wejscie, struct zespol* pHead, char* nazwa_z
 		pMy = pMy->pNext;
 		i++;
 	}
-	fprintf(*p_wejscie, "Twoja druzyna zakonczyla sezon na %i miejscu. Gratulacje!\n\nOto koncowy stan Twojej druzyny:\n\n", i);
-	wypisz_zespol(p_wejscie, pMy);
+	fprintf(*p_wyjscie, "Twoja druzyna zakonczyla sezon na %i miejscu. Gratulacje!\n\nOto koncowy stan Twojej druzyny:\n\n", i);
+	wypisz_zespol(p_wyjscie, pMy);
 }
 
 void zwolnij_wszystko(struct zespol** ppHead, struct lk** pkpHead, char** imiona, char** nazwiska, char*** p_zespoly, int liczba_zespolow)
