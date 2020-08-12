@@ -37,6 +37,21 @@ int pobierz_dane(int argc, char** argv, int* liczba_zespolow, char** nazwa_zespo
 		return 0;
 	}
 
+	if ((*nazwa_zespolu)[0] < 65 || (*nazwa_zespolu)[0] > 90)
+	{
+		printf("\nPierwsza litera nazwy Twojego zespolu musi byc wielka\n");
+		return 0;
+	}
+
+	for (i = 1; i < strlen(*nazwa_zespolu); i++)
+	{
+		if ((*nazwa_zespolu)[i] < 97 || (*nazwa_zespolu)[i] > 122)
+		{
+			printf("\nWszystkie litery nazwy Twojego zespolu poza pierwsza musza byc male\n");
+			return 0;
+		}
+	}
+
 	if (*wejsciowy == NULL)
 	{
 		printf("\nNie podano nazwy pilku wejsciowego\n");
@@ -837,7 +852,7 @@ void przeprowadz_lige(struct zespol* pHead, struct lk** pkpHead, int liczba_zesp
 void wypisz_zespol(FILE** p_wejscie, struct zespol* pTemp)
 {
 	int i = 0;
-	fprintf(*p_wejscie, "%s\n\nNumer id: %i\n\nPunkty: %i\n\nBudzet: %i\n\nTygodniowki: %i\n\nSklad podstawowy:\n", pTemp->nazwa_druzyny, pTemp->nr_id, pTemp->points, pTemp->budget, pTemp->wages);
+	fprintf(*p_wejscie, "%s\n\nPunkty: %i\n\nBudzet: %i\n\nTygodniowki: %i\n\nSklad podstawowy:\n", pTemp->nazwa_druzyny, pTemp->nr_id, pTemp->points, pTemp->budget, pTemp->wages);
 	
 	for (i; i < 11; i++)
 		fprintf(*p_wejscie, "\n%-15s %-15s %-3i %-7i %-6i %-1i", pTemp->squad[i].imie, pTemp->squad[i].nazwisko, pTemp->squad[i].umiejetnosci, pTemp->squad[i].klauzula_odstepnego, pTemp->squad[i].tygodniowka, pTemp->squad[i].kontuzja);
@@ -873,7 +888,7 @@ void wpisz_wyniki_do_pliku(FILE** p_wejscie, struct zespol* pHead, char* nazwa_z
 		pMy = pMy->pNext;
 		i++;
 	}
-	fprintf(*p_wejscie, "Twoja druzyna zakonczyla sezon na %i miejscu. Gratulacje!\n\nOto koncowy stan Twojej druzyny:\n", i);
+	fprintf(*p_wejscie, "Twoja druzyna zakonczyla sezon na %i miejscu. Gratulacje!\n\nOto koncowy stan Twojej druzyny:\n\n", i);
 	wypisz_zespol(p_wejscie, pMy);
 }
 
